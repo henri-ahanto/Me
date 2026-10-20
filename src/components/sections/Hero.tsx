@@ -43,7 +43,7 @@ export function Hero() {
                 )}
                 <span className="relative inline-flex h-2 w-2 rounded-full bg-mint" />
               </span>
-              Disponible · CDI &amp; Freelance
+              Disponible · CDI, CDD &amp; Freelance
             </div>
           </Reveal>
 

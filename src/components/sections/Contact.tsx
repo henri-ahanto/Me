@@ -109,7 +109,7 @@ export function Contact() {
                 </h3>
 
                 <p className="mt-3 max-w-md text-sm leading-relaxed text-mist">
-                  Disponible pour des missions freelance, un poste en CDI ou une collaboration
+                  Disponible pour des missions freelance, un poste en CDI/CDD ou une collaboration
                   autour du web, du mobile et de l&apos;IA.
                 </p>
 

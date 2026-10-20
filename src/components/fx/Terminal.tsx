@@ -15,7 +15,7 @@ const LINES: Line[] = [
   { text: '  "ia": "PyTorch · Pandas" }', tone: "json" },
   { text: "", tone: "blank" },
   { text: "$ status --availability", tone: "cmd" },
-  { text: "✔ open_to: CDI · Freelance", tone: "ok" },
+  { text: "✔ open_to: CDI · CDD · Freelance", tone: "ok" },
 ];
 
 const TONE_CLASS: Record<Tone, string> = {

@@ -63,7 +63,7 @@ const CODE_LINES = [
     number: 7,
     content: (
       <>
-        {"  "}availability: <span className="text-php">"CDI · Freelance"</span>,
+        {"  "}availability: <span className="text-php">"CDI · CDD · Freelance"</span>,
       </>
     ),
   },
