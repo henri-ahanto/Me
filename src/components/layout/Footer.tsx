@@ -1,8 +1,11 @@
 import { ArrowUp } from "lucide-react";
-import { profile } from "../../data/profile";
+import { usePortfolio } from "../../data/PortfolioProvider";
 import { GithubIcon, YoutubeIcon } from "../ui/BrandIcons";
 
 export function Footer() {
+  const { data } = usePortfolio();
+  const { profile } = data;
+
   return (
     <footer className="relative z-10 border-t border-white/8 bg-ink-950/60">
       <div className="container-page flex flex-col gap-6 py-8 sm:flex-row sm:items-center sm:justify-between">
@@ -13,7 +16,7 @@ export function Footer() {
             <span className="text-python-yellow"> /&gt;</span>
           </a>
           <p className="text-xs text-mist">
-            © {new Date().getFullYear()} AHANTO Henri Sylvain. Tous droits réservés.
+            © {new Date().getFullYear()} {profile.name}. Tous droits réservés.
           </p>
         </div>
 

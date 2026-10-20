@@ -1,6 +1,6 @@
 import { ArrowDown, Download, Mail, MapPin } from "lucide-react";
 import { motion, useReducedMotion } from "motion/react";
-import { profile } from "../../data/profile";
+import { usePortfolio } from "../../data/PortfolioProvider";
 import { Reveal } from "../fx/Reveal";
 import { Terminal } from "../fx/Terminal";
 import { Typewriter } from "../fx/Typewriter";
@@ -26,6 +26,10 @@ const FLOAT_BADGES = [
 
 export function Hero() {
   const reduce = useReducedMotion();
+  const { data } = usePortfolio();
+  const { profile } = data;
+  const [firstName, ...otherNames] = profile.firstName.split(" ");
+  const secondName = otherNames.join(" ") || profile.lastName;
 
   return (
     <section id="accueil" className="relative overflow-hidden pb-10 pt-28 sm:pt-32">
@@ -46,12 +50,12 @@ export function Hero() {
           <Reveal delay={0.08}>
             <p className="mt-7 font-mono text-[11px] text-mist sm:text-xs">
               <span className="text-python-yellow">const</span> developer ={" "}
-              <span className="text-php">"AHANTO"</span>;
+              <span className="text-php">"{profile.lastName}"</span>;
             </p>
             <h1 className="mt-3 text-balance text-[2.9rem] font-extrabold leading-[0.98] tracking-tight text-snow sm:text-6xl xl:text-[4.6rem]">
-              Henri
+              {firstName}
               <br />
-              <span className="gradient-text">Sylvain</span>
+              <span className="gradient-text">{secondName}</span>
               <span className="text-laravel">.</span>
             </h1>
           </Reveal>

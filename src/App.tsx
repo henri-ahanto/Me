@@ -11,13 +11,14 @@ import { Background } from "./components/fx/Background";
 import { IntroExperience } from "./components/fx/IntroExperience";
 import { ScrollProgress } from "./components/fx/ScrollProgress";
 import { Spotlight } from "./components/fx/Spotlight";
+import { PortfolioProvider } from "./data/PortfolioProvider";
 
 export default function App() {
   const [siteVisible, setSiteVisible] = useState(false);
   const revealSite = useCallback(() => setSiteVisible(true), []);
 
   return (
-    <>
+    <PortfolioProvider>
       {siteVisible && (
         <div className="relative min-h-screen bg-ink-900 text-snow">
           <Background />
@@ -37,6 +38,6 @@ export default function App() {
       )}
 
       <IntroExperience onRevealStart={revealSite} />
-    </>
+    </PortfolioProvider>
   );
 }

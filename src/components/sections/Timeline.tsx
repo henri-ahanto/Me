@@ -1,13 +1,15 @@
 import { GraduationCap } from "lucide-react";
 import { motion, useReducedMotion, useScroll, useSpring } from "motion/react";
 import { useRef } from "react";
-import { diplomas, timeline } from "../../data/profile";
+import { usePortfolio } from "../../data/PortfolioProvider";
 import { Reveal } from "../fx/Reveal";
 import { SectionHeading } from "../ui/SectionHeading";
 
 export function Timeline() {
   const ref = useRef<HTMLDivElement>(null);
   const reduce = useReducedMotion();
+  const { data } = usePortfolio();
+  const { timeline, diplomas } = data;
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start 0.78", "end 0.55"],

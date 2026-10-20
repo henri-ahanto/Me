@@ -1,5 +1,5 @@
 import { ArrowUpRight, CircleDot, FolderCode } from "lucide-react";
-import { projects } from "../../data/profile";
+import { usePortfolio } from "../../data/PortfolioProvider";
 import type { Accent } from "../../data/profile";
 import { Reveal } from "../fx/Reveal";
 import { TiltCard } from "../fx/TiltCard";
@@ -15,6 +15,9 @@ const PREVIEWS: Record<Accent, string> = {
 };
 
 export function Projects() {
+  const { data } = usePortfolio();
+  const { projects } = data;
+
   return (
     <section id="projets" className="relative scroll-mt-24 py-24 sm:py-28">
       <div className="container-page">

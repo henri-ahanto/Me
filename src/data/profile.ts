@@ -1,6 +1,28 @@
 export type Accent = "python" | "laravel" | "php" | "yellow";
 
-export const profile = {
+export type Profile = {
+  name: string;
+  firstName: string;
+  lastName: string;
+  handle: string;
+  role: string;
+  roles: string[];
+  tagline: string;
+  location: string;
+  email: string;
+  phones: string[];
+  availability: string;
+  bio: string[];
+  links: {
+    github: string;
+    youtube: string;
+    portfolio: string;
+    cv: string;
+  };
+  languages: string[];
+};
+
+export const profile: Profile = {
   name: "AHANTO Henri Sylvain",
   firstName: "Henri Sylvain",
   lastName: "AHANTO",
@@ -30,9 +52,15 @@ export const profile = {
     cv: "/CV_AHANTO_Henri_Sylvain.pdf",
   },
   languages: ["Français", "Anglais", "Fon", "Adja"],
-} as const;
+};
 
-export const stats = [
+export type Stat = {
+  value: number;
+  suffix: string;
+  label: string;
+};
+
+export const stats: Stat[] = [
   { value: 4, suffix: "", label: "Projets réalisés" },
   { value: 25, suffix: "+", label: "Technologies maîtrisées" },
   { value: 3, suffix: "", label: "Stages effectués" },
@@ -240,7 +268,13 @@ export const timeline: TimelineItem[] = [
   },
 ];
 
-export const diplomas = [
+export type Diploma = {
+  year: string;
+  title: string;
+  place: string;
+};
+
+export const diplomas: Diploma[] = [
   { year: "2023", title: "BAC série F3", place: "Lycée Technique de Lokossa" },
   { year: "2023", title: "DT série F3", place: "Lycée Technique de Lokossa" },
   { year: "2022", title: "CAP série F3", place: "Lycée Technique de Lokossa" },
@@ -256,3 +290,21 @@ export const navLinks = [
   { id: "parcours", label: "Parcours" },
   { id: "contact", label: "Contact" },
 ];
+
+export type PortfolioData = {
+  profile: Profile;
+  stats: Stat[];
+  skillCategories: SkillCategory[];
+  projects: Project[];
+  timeline: TimelineItem[];
+  diplomas: Diploma[];
+};
+
+export const fallbackPortfolio: PortfolioData = {
+  profile,
+  stats,
+  skillCategories,
+  projects,
+  timeline,
+  diplomas,
+};

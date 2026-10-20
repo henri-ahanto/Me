@@ -1,32 +1,8 @@
 import { GraduationCap, Languages, MapPin, Sparkles } from "lucide-react";
-import { profile, stats } from "../../data/profile";
+import { usePortfolio } from "../../data/PortfolioProvider";
 import { Counter } from "../fx/Counter";
 import { Reveal } from "../fx/Reveal";
 import { SectionHeading } from "../ui/SectionHeading";
-
-const INFO = [
-  {
-    icon: MapPin,
-    label: "Localisation",
-    value: profile.location,
-    color: "text-laravel",
-    bg: "bg-laravel/10",
-  },
-  {
-    icon: GraduationCap,
-    label: "Formation",
-    value: "Licence 3 Informatique & Télécom — INSTI",
-    color: "text-python-light",
-    bg: "bg-python/10",
-  },
-  {
-    icon: Sparkles,
-    label: "Disponibilité",
-    value: "CDI · Freelance · Ouvert aux échanges",
-    color: "text-python-yellow",
-    bg: "bg-python-yellow/10",
-  },
-];
 
 const CODE_LINES = [
   {
@@ -106,6 +82,33 @@ const CODE_LINES = [
 ];
 
 export function About() {
+  const { data } = usePortfolio();
+  const { profile, stats } = data;
+
+  const info = [
+    {
+      icon: MapPin,
+      label: "Localisation",
+      value: profile.location,
+      color: "text-laravel",
+      bg: "bg-laravel/10",
+    },
+    {
+      icon: GraduationCap,
+      label: "Formation",
+      value: "Licence 3 Informatique & Télécom — INSTI",
+      color: "text-python-light",
+      bg: "bg-python/10",
+    },
+    {
+      icon: Sparkles,
+      label: "Disponibilité",
+      value: profile.availability,
+      color: "text-python-yellow",
+      bg: "bg-python-yellow/10",
+    },
+  ];
+
   return (
     <section id="a-propos" className="relative scroll-mt-24 py-24 sm:py-28">
       <div className="container-page">
@@ -204,7 +207,7 @@ export function About() {
             </div>
 
             <div className="mt-4 grid gap-3">
-              {INFO.map((item) => (
+              {info.map((item) => (
                 <div
                   key={item.label}
                   className="glass card-hover flex items-start gap-3 rounded-xl p-3.5"

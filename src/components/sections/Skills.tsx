@@ -1,6 +1,6 @@
 import { BrainCircuit, Boxes, Code2, Database, Layers, Palette } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { skillCategories } from "../../data/profile";
+import { usePortfolio } from "../../data/PortfolioProvider";
 import type { Accent, SkillCategory } from "../../data/profile";
 import { Reveal } from "../fx/Reveal";
 import { SectionHeading } from "../ui/SectionHeading";
@@ -50,6 +50,9 @@ const ACCENTS: Record<
 };
 
 export function Skills() {
+  const { data } = usePortfolio();
+  const { skillCategories } = data;
+
   return (
     <section id="competences" className="relative scroll-mt-24 py-24 sm:py-28">
       <div className="container-page">

@@ -1,14 +1,30 @@
-import { ArrowUpRight, Check, Copy, Mail, MapPin, Phone, Send } from "lucide-react";
+import {
+  AlertCircle,
+  ArrowUpRight,
+  Check,
+  Copy,
+  LoaderCircle,
+  Mail,
+  MapPin,
+  Phone,
+  Send,
+} from "lucide-react";
 import { useState } from "react";
 import type { FormEvent } from "react";
-import { profile } from "../../data/profile";
+import { usePortfolio } from "../../data/PortfolioProvider";
+import { sendContactMessage } from "../../lib/api";
 import { Reveal } from "../fx/Reveal";
 import { GithubIcon, YoutubeIcon } from "../ui/BrandIcons";
 import { SectionHeading } from "../ui/SectionHeading";
 
+type FormStatus = "idle" | "sending" | "success" | "error";
+
 export function Contact() {
+  const { data } = usePortfolio();
+  const { profile } = data;
   const [copied, setCopied] = useState(false);
-  const [sent, setSent] = useState(false);
+  const [status, setStatus] = useState<FormStatus>("idle");
+  const [feedback, setFeedback] = useState<string | null>(null);
 
   const copyEmail = async () => {
     try {
@@ -20,21 +36,39 @@ export function Contact() {
     }
   };
 
-  const onSubmit = (event: FormEvent<HTMLFormElement>) => {
+  const onSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const name = String(data.get("name") ?? "").trim();
-    const email = String(data.get("email") ?? "").trim();
-    const message = String(data.get("message") ?? "").trim();
 
-    const subject = encodeURIComponent(`Contact portfolio — ${name || "Nouveau message"}`);
-    const body = encodeURIComponent(
-      `${message}\n\n— ${name || "Anonyme"}\n${email || "Email non renseigné"}`,
-    );
+    if (status === "sending") return;
 
-    window.location.href = `mailto:${profile.email}?subject=${subject}&body=${body}`;
-    setSent(true);
-    window.setTimeout(() => setSent(false), 5000);
+    const form = event.currentTarget;
+    const formData = new FormData(form);
+    const name = String(formData.get("name") ?? "").trim();
+    const email = String(formData.get("email") ?? "").trim();
+    const message = String(formData.get("message") ?? "").trim();
+    const website = String(formData.get("website") ?? "");
+
+    setStatus("sending");
+    setFeedback(null);
+
+    try {
+      const result = await sendContactMessage({ name, email, message, website });
+
+      setStatus("success");
+      setFeedback(result.message);
+      form.reset();
+      window.setTimeout(
+        () => setStatus((current) => (current === "success" ? "idle" : current)),
+        5000,
+      );
+    } catch (reason) {
+      setStatus("error");
+      setFeedback(
+        reason instanceof Error
+          ? reason.message
+          : "Impossible d'envoyer le message. Réessayez ou écrivez-moi directement.",
+      );
+    }
   };
 
   return (
@@ -176,6 +210,16 @@ export function Contact() {
               </div>
 
               <form onSubmit={onSubmit} className="flex flex-col">
+                <div
+                  aria-hidden="true"
+                  className="absolute -left-[9999px] h-0 w-0 overflow-hidden"
+                >
+                  <label>
+                    Site web
+                    <input type="text" name="website" tabIndex={-1} autoComplete="off" />
+                  </label>
+                </div>
+
                 <div className="grid gap-4 sm:grid-cols-2">
                   <label className="flex flex-col gap-1.5">
                     <span className="font-mono text-[10px] uppercase tracking-[0.16em] text-mist">
@@ -219,11 +263,20 @@ export function Contact() {
                   />
                 </label>
 
-                <button type="submit" className="btn btn-primary mt-4 w-full">
-                  {sent ? (
+                <button
+                  type="submit"
+                  disabled={status === "sending"}
+                  className="btn btn-primary mt-4 w-full disabled:cursor-wait disabled:opacity-70"
+                >
+                  {status === "sending" ? (
+                    <>
+                      <LoaderCircle className="h-4 w-4 animate-spin" />
+                      Envoi en cours…
+                    </>
+                  ) : status === "success" ? (
                     <>
                       <Check className="h-4 w-4" />
-                      Message préparé — vérifiez votre client mail
+                      Message envoyé
                     </>
                   ) : (
                     <>
@@ -233,8 +286,33 @@ export function Contact() {
                   )}
                 </button>
 
+                {feedback && (
+                  <p
+                    className={`mt-3 flex items-start justify-center gap-2 text-center text-xs leading-relaxed ${
+                      status === "success" ? "text-mint" : "text-laravel"
+                    }`}
+                    role="status"
+                  >
+                    {status === "success" ? (
+                      <Check className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                    ) : (
+                      <AlertCircle className="mt-0.5 h-3.5 w-3.5 shrink-0" />
+                    )}
+                    <span>{feedback}</span>
+                  </p>
+                )}
+
+                {status === "error" && (
+                  <a
+                    href={`mailto:${profile.email}`}
+                    className="mt-2 text-center font-mono text-[10px] text-python-light underline underline-offset-4 transition-colors hover:text-python-yellow"
+                  >
+                    Ou écrire directement à {profile.email}
+                  </a>
+                )}
+
                 <p className="mt-3 text-center font-mono text-[10px] leading-relaxed text-mist/50">
-                  // le formulaire ouvre votre client mail — aucune donnée n&apos;est stockée.
+                  // message envoyé à mon backend Laravel — réponse par email.
                 </p>
               </form>
             </div>
